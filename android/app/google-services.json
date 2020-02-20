@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "136901959141",
+    "firebase_url": "https://waroengapp-94b6f.firebaseio.com",
+    "project_id": "waroengapp-94b6f",
+    "storage_bucket": "waroengapp-94b6f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136901959141:android:1d648a2d691a5d20bce30c",
+        "android_client_info": {
+          "package_name": "com.example.waroeng_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136901959141-h1r5p436mlr8iq1otm77lcd9g4l2umha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL4JGIrePk8PD_se_Tro_AaSUQKEjJLNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136901959141-h1r5p436mlr8iq1otm77lcd9g4l2umha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
