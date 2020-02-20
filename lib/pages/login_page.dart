@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false, _isLoginForm = false;
+  bool _isLoading = false, _isLoginForm = true;
   String _mEmail, _mPassword;
 
   @override
@@ -138,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _appLogo() {
     return Image(
       width: 150.0,
-      image: AssetImage('images/logo.png'),
+      image: AssetImage('images/red_logo.png'),
     );
   }
 

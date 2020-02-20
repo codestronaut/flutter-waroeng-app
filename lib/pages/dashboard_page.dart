@@ -138,7 +138,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     Widget continueButton = FlatButton(
       onPressed: () {
-        // logOut();
+        logOut();
         Navigator.pop(context);
       },
       child: Text(
