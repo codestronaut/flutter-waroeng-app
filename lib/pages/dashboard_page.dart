@@ -37,14 +37,17 @@ class _DashboardPageState extends State<DashboardPage> {
           child: ListView(
             children: <Widget>[
               DrawerHeader(
-                child: CircleAvatar(
-                  backgroundColor: Colors.red[400],
-                  radius: 2.0,
-                  child: Text(
-                    'A',
-                    style: TextStyle(
-                      fontSize: 50.0,
-                      color: Colors.white,
+                decoration: BoxDecoration(color: Colors.grey[800]),
+                padding: EdgeInsets.all(30.0),
+                child: Container(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red[400],
+                    child: Text(
+                      'A',
+                      style: TextStyle(
+                        fontSize: 50.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -77,13 +80,10 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.red[800]),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
           centerTitle: true,
           title: Image(
             image: AssetImage('images/logo.png'),
-            height: 60.0,
+            height: 70.0,
           ),
         ),
         body: _menuGridView(),

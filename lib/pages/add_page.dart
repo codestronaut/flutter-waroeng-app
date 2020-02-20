@@ -19,14 +19,8 @@ class _AddPageState extends State<AddPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.red[800]),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
           title: Text(
             'Tambah Warung',
-            style: TextStyle(
-              color: Colors.red[800],
-            ),
           ),
         ),
         body: Center(
