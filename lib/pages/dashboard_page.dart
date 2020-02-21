@@ -1,7 +1,9 @@
 /* IMPORT PACKAGE */
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:waroeng_app/services/fire_auth_service.dart';
 import 'package:waroeng_app/pages/add_page.dart';
+import 'package:waroeng_app/data/record.dart';
 
 /*
   DASHBOARD PAGE
@@ -33,6 +35,12 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.red[800],
+            child: Icon(Icons.message),
+            onPressed: () {
+              // NOT IMPLEMENT YET
+            }),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
@@ -53,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.store),
+                leading: Icon(Icons.add),
                 title: Text('Buat Warung'),
                 onTap: () {
                   Navigator.push(
@@ -63,6 +71,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   );
                 },
+              ),
+              ListTile(
+                leading: Icon(Icons.store),
+                title: Text('Warung Saya'),
+                onTap: () {},
               ),
               ListTile(
                 leading: Icon(Icons.history),
@@ -80,38 +93,115 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
         appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.red[800]),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           centerTitle: true,
           title: Image(
-            image: AssetImage('images/logo.png'),
+            image: AssetImage('images/red_logo.png'),
             height: 70.0,
           ),
         ),
-        body: _menuGridView(),
+        body: _buildBody(context),
       ),
     );
   }
 
-  Widget _menuGridView() {
-    return Container(
-      child: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(3, (index) {
-          return Padding(
-            padding: EdgeInsets.only(
-              left: 8.0,
-              right: 8.0,
-              bottom: 8.0,
-              top: 8.0,
-            ),
-            child: Card(
-              child: Center(
-                child: Text(
-                  'This is card!',
-                ),
-              ),
+  Widget _buildBody(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('food_store').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0,
             ),
           );
-        }),
+
+        return _buildList(context, snapshot.data.documents);
+      },
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return GridView.count(
+      childAspectRatio: 0.75,
+      crossAxisCount: 2,
+      padding: EdgeInsets.only(top: 20.0),
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final record = Record.fromSnapshot(data);
+
+    return Padding(
+      key: ValueKey(record.name),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.red[800],
+          ),
+          borderRadius: BorderRadius.circular(
+            10.0,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                record.name,
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 16.0,
+              ),
+              Text(
+                record.description,
+                style: TextStyle(fontSize: 16.0),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(Icons.place),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  Text(record.address),
+                ],
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(Icons.phone),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  Text(record.phoneNumber.toString()),
+                ],
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              OutlineButton(
+                child: Text('Detail'),
+                splashColor: Colors.red[400],
+                highlightedBorderColor: Colors.red[800],
+                onPressed: () {
+                  // NOT IMPLEMENT YET
+                },
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
