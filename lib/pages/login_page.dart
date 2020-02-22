@@ -1,4 +1,5 @@
 /* IMPORT PACKAGE */
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:waroeng_app/services/fire_auth_service.dart';
 
@@ -13,9 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final databaseReference = Firestore.instance;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false, _isLoginForm = true;
-  String _mEmail, _mPassword;
+  String _mUsername, _mEmail, _mPassword, _mUserPhoneNumber;
 
   @override
   void initState() {
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           print('Pengguna Masuk: $userId'); // LOG
         } else {
           userId = await widget.auth.signUp(_mEmail, _mPassword);
+          _addUserRecord(userId);
           print('Pengguna Terdaftar: $userId'); // LOG
         }
 
@@ -79,6 +82,15 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
+  }
+
+  void _addUserRecord(String userId) async {
+    await databaseReference.collection('user').document().setData({
+      'UserId': userId,
+      'Username': _mUsername,
+      'UserEmail': _mEmail,
+      'UserPhone': int.parse(_mUserPhoneNumber)
+    });
   }
 
   @override
@@ -109,14 +121,16 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 80.0,
-              vertical: 40.0,
+              vertical: 20.0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _appLogo(),
+                _isLoginForm ? SizedBox() : _userNameTextField(),
                 _emailTextField(),
+                _isLoginForm ? SizedBox() : _phoneNumberTextField(),
                 _passwordTextField(),
                 SizedBox(
                   height: 20.0,
@@ -137,8 +151,24 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _appLogo() {
     return Image(
-      width: 150.0,
-      image: AssetImage('images/red_logo.png'),
+      height: 100,
+      image: AssetImage('images/logo.png'),
+    );
+  }
+
+  Widget _userNameTextField() {
+    return TextFormField(
+      cursorColor: Colors.red[800],
+      autofocus: false,
+      obscureText: false,
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        hintText: 'Username',
+      ),
+      validator: (value) =>
+          value.isEmpty ? "Username tidak boleh kosong" : null,
+      onSaved: (value) => _mUsername = value.trim(),
     );
   }
 
@@ -154,6 +184,22 @@ class _LoginPageState extends State<LoginPage> {
       ),
       validator: (value) => value.isEmpty ? "Email tidak boleh kosong" : null,
       onSaved: (value) => _mEmail = value.trim(),
+    );
+  }
+
+  Widget _phoneNumberTextField() {
+    return TextFormField(
+      cursorColor: Colors.red[800],
+      autofocus: false,
+      obscureText: false,
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        hintText: 'Nomor Hp',
+      ),
+      validator: (value) =>
+          value.isEmpty ? "Nomor Hp tidak boleh kosong" : null,
+      onSaved: (value) => _mUserPhoneNumber = value.trim(),
     );
   }
 

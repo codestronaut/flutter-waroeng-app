@@ -92,7 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
           elevation: 0,
           centerTitle: true,
           title: Image(
-            image: AssetImage('images/red_logo.png'),
+            image: AssetImage('images/logo.png'),
             height: 70.0,
           ),
         ),
