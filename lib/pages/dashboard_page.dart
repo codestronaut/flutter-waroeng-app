@@ -35,12 +35,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.red[800],
-            child: Icon(Icons.message),
-            onPressed: () {
-              // NOT IMPLEMENT YET
-            }),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
@@ -94,8 +88,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.red[800]),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+          backgroundColor: Colors.white,
           centerTitle: true,
           title: Image(
             image: AssetImage('images/red_logo.png'),

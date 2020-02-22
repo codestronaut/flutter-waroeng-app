@@ -1,6 +1,11 @@
 /* IMPORT PACKAGE */
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
+import 'package:file_picker/file_picker.dart';
 
 /*
   AddPage
@@ -15,6 +20,9 @@ class _AddPageState extends State<AddPage> {
   final _formKey = GlobalKey<FormState>();
   final databaseReference = Firestore.instance;
   String _mName, _mAddress, _mDescription, _mPhoneNumber;
+  String _fileType = '';
+  File file;
+  String _fileName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +104,20 @@ class _AddPageState extends State<AddPage> {
               onSaved: (value) => _mPhoneNumber = value.trim(),
             ),
             SizedBox(
-              height: 30.0,
+              height: 10.0,
+            ),
+            OutlineButton(
+              onPressed: () {
+                setState(() {
+                  _fileType = 'image';
+                });
+                _filePicker(context);
+              },
+              highlightedBorderColor: Colors.red[400],
+              child: Text('Upload Gambar'),
+            ),
+            SizedBox(
+              height: 20.0,
             ),
             RaisedButton(
               padding: EdgeInsets.symmetric(vertical: 14.0),
@@ -141,5 +162,47 @@ class _AddPageState extends State<AddPage> {
         'Phone Number': int.parse(_mPhoneNumber)
       });
     }
+  }
+
+  Future _filePicker(BuildContext context) async {
+    try {
+      if (_fileType == 'image') {
+        file = await FilePicker.getFile(type: FileType.IMAGE);
+        setState(() {
+          _fileName = p.basename(file.path);
+        });
+        print(_fileName);
+        _uploadFile(file, _fileName);
+      }
+    } on PlatformException catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Maaf'),
+            content: Text('Tipe file salah! : $e'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> _uploadFile(File file, String fileName) async {
+    StorageReference storageRef;
+    if (_fileType == 'image') {
+      storageRef = FirebaseStorage.instance.ref().child('images/$_fileName');
+    }
+    final StorageUploadTask storageUpload = storageRef.putFile(file);
+    final StorageTaskSnapshot downloadURL = (await storageUpload.onComplete);
+    final String url = (await downloadURL.ref.getDownloadURL());
+    print('URL is: $url'); // LOG
   }
 }
