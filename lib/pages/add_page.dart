@@ -19,7 +19,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   final _formKey = GlobalKey<FormState>();
   final databaseReference = Firestore.instance;
-  String _mName, _mAddress, _mDescription, _mPhoneNumber;
+  String _mName, _mAddress, _mDescription, _mPhoneNumber, _mImageUrl;
   String _fileType = '';
   File file;
   String _fileName = '';
@@ -159,7 +159,8 @@ class _AddPageState extends State<AddPage> {
         'Name': _mName,
         'Address': _mAddress,
         'Description': _mDescription,
-        'Phone Number': int.parse(_mPhoneNumber)
+        'Phone Number': int.parse(_mPhoneNumber),
+        'Image Url': _mImageUrl,
       });
     }
   }
@@ -203,6 +204,9 @@ class _AddPageState extends State<AddPage> {
     final StorageUploadTask storageUpload = storageRef.putFile(file);
     final StorageTaskSnapshot downloadURL = (await storageUpload.onComplete);
     final String url = (await downloadURL.ref.getDownloadURL());
+    setState(() {
+      _mImageUrl = url;
+    });
     print('URL is: $url'); // LOG
   }
 }

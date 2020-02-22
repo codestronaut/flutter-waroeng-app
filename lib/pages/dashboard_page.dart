@@ -88,7 +88,8 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.red[800]),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           centerTitle: true,
           title: Image(
             image: AssetImage('images/red_logo.png'),
@@ -130,68 +131,38 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Padding(
       key: ValueKey(record.name),
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.red[800],
+          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5.0)],
+          image: DecorationImage(
+            image: NetworkImage(
+              record.imageUrl,
+            ),
+            fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(
             10.0,
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.only(
+            left: 8.0,
+            bottom: 16.0,
+            right: 8.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Text(
                 record.name,
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              SizedBox(
-                height: 16.0,
-              ),
-              Text(
-                record.description,
-                style: TextStyle(fontSize: 16.0),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(Icons.place),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                  Text(record.address),
-                ],
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(Icons.phone),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                  Text(record.phoneNumber.toString()),
-                ],
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-              OutlineButton(
-                child: Text('Detail'),
-                splashColor: Colors.red[400],
-                highlightedBorderColor: Colors.red[800],
-                onPressed: () {
-                  // NOT IMPLEMENT YET
-                },
-              )
             ],
           ),
         ),
