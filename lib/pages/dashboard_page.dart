@@ -1,4 +1,5 @@
 /* IMPORT PACKAGE */
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:waroeng_app/services/fire_auth_service.dart';
@@ -119,48 +120,63 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return GridView.count(
-      childAspectRatio: 0.75,
+      childAspectRatio: 0.7,
       crossAxisCount: 2,
       padding: EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+      children:
+          snapshot.map((data) => _buildCardListItem(context, data)).toList(),
     );
   }
 
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+  Widget _buildCardListItem(BuildContext context, DocumentSnapshot data) {
     final record = Record.fromSnapshot(data);
-
     return Padding(
-      key: ValueKey(record.name),
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5.0)],
-          image: DecorationImage(
-            image: NetworkImage(
-              record.imageUrl,
-            ),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 8.0,
-            bottom: 16.0,
-            right: 8.0,
-          ),
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+      child: Card(
+        child: InkWell(
+          splashColor: Colors.red[800].withAlpha(80),
+          onTap: () {
+            // NOT IMPLEMENT YET
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(
-                record.name,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: FadeInImage.assetNetwork(
+                    fit: BoxFit.cover,
+                    height: 150.0,
+                    placeholder: 'images/placeholder.png',
+                    image: record.imageUrl,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: Text(
+                  record.name,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.location_on,
+                      size: 16.0,
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Text(record.address),
+                  ],
                 ),
               ),
             ],
