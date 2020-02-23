@@ -136,6 +136,7 @@ class _AddPageState extends State<AddPage> {
                 setState(() {
                   _addRecord();
                 });
+                Navigator.pop(context);
               },
             ),
           ],

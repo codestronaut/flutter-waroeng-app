@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:waroeng_app/services/fire_auth_service.dart';
 import 'package:waroeng_app/pages/add_page.dart';
 import 'package:waroeng_app/data/record.dart';
+import 'package:waroeng_app/pages/detail_page.dart';
 
 /*
   DASHBOARD PAGE
@@ -21,8 +22,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  String foodStoreId, userEmail;
+
   @override
   void initState() {
+    getUserEmail();
     super.initState();
   }
 
@@ -39,15 +43,22 @@ class _DashboardPageState extends State<DashboardPage> {
           child: ListView(
             children: <Widget>[
               DrawerHeader(
-                decoration: BoxDecoration(color: Colors.grey[800]),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      'images/header.png',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 padding: EdgeInsets.all(30.0),
                 child: Container(
                   child: CircleAvatar(
                     backgroundColor: Colors.red[400],
                     child: Text(
-                      'A',
+                      userEmail,
                       style: TextStyle(
-                        fontSize: 50.0,
+                        fontSize: 45.0,
                         color: Colors.white,
                       ),
                     ),
@@ -56,7 +67,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               ListTile(
                 leading: Icon(Icons.add),
-                title: Text('Buat Warung'),
+                title: Text('Tambah Kedai'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -67,13 +78,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.store),
-                title: Text('Warung Saya'),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.history),
-                title: Text('Riwayat Pesanan'),
+                leading: Icon(Icons.info),
+                title: Text('About App'),
                 onTap: () {},
               ),
               ListTile(
@@ -136,6 +142,17 @@ class _DashboardPageState extends State<DashboardPage> {
           splashColor: Colors.red[800].withAlpha(80),
           onTap: () {
             // NOT IMPLEMENT YET
+            foodStoreId = record.reference.documentID.toString();
+            print(foodStoreId);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailPage(),
+                settings: RouteSettings(
+                  arguments: foodStoreId,
+                ),
+              ),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -183,6 +200,18 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+
+  void getUserEmail() async {
+    try {
+      widget.auth.getCurrentUser().then((user) {
+        setState(() {
+          userEmail = user.email[0].toUpperCase();
+        });
+      });
+    } catch (e) {
+      print('Terjadi kesalahan: $e'); // LOG
+    }
   }
 
   void logOut() async {
